@@ -41,9 +41,11 @@ void MainWindow::paintEvent(QPaintEvent *event)
     double x = 255.0 / w;
     double y = 255.0 / h;
 
+    // git check
     Vec3f p1 = triangles[0];
     Vec3f p2 = triangles[1];
     Vec3f p3 = triangles[2];
+
     for(size_t i = 0; i < w; i++)
     {
         for(size_t j = 0; j < h; j++)
