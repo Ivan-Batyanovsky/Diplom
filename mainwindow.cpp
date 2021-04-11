@@ -5,11 +5,7 @@
 
 #include <QPaintEvent>
 #include <QPixmap>
-
-bool edgeFunction(const Vec3f &a, const Vec3f &b, const Vec3f &c)
-{
-    return ((c.getX() - a.getX()) * (b.getY() - a.getY()) - (c.getY() - a.getY()) * (b.getX() - a.getX()) >= 0);
-}
+#include <iostream>
 
 MainWindow::MainWindow(QWidget *parent)
     : QWidget(parent)
@@ -26,36 +22,39 @@ void MainWindow::paintEvent(QPaintEvent *event)
     size_t w = static_cast<size_t>(geometry().width());
     size_t h = static_cast<size_t>(geometry().height());
 
-    Buffers::fDepthBuffer zbuffer(w, h);
-    for (size_t i = 0; i < w; i++) {
-        for (size_t j  = 0; j < h; j++) {
-            zbuffer.set(i, j, 10000.0f);
-        }
-    }
-    Buffers::ColourBuffer cbuffer(w, h);
-    cbuffer.clear();
     QPainter painter(this);
-    Cube testCube(0,0,1, 1);
-    std::vector<Vec3f> triangles;
-    testCube.getIndexes(triangles);
-    double x = 255.0 / w;
-    double y = 255.0 / h;
 
-    // git check
-    Vec3f p1 = triangles[0];
-    Vec3f p2 = triangles[1];
-    Vec3f p3 = triangles[2];
+    // init objects to draw
+    Cube testCube(-0.5, -0.5, -0.5, 1);
 
+    // Getting triangles(3 consecutive points from 0, 3, 6 ... vector.size() - 4 make triangle) of objects
+    std::vector<Vec3f> trianglesPoints;
+    testCube.getIndexes(trianglesPoints);
+
+    // actly do not know wtf is this so stay commented
+//    double x = 255.0 / w;
+//    double y = 255.0 / h;
+
+    // for now it's an identity matrix
+    Mat3f modelViewProjectMat;
+    modelViewProjectMat.setIdentity();
+
+    // not necessary but prefer dark background
+    painter.setPen(QColor(0, 0, 0, 255));
     for(size_t i = 0; i < w; i++)
-    {
         for(size_t j = 0; j < h; j++)
-        {
-            if (zbuffer.get(i, j) != 10000.0f)
-                painter.setPen(QColor(255, 0, 0, 255));
+                painter.drawPoint(i, j);
 
-            painter.drawPoint(i, j);
-            painter.setPen(QColor(0, 255, 255, 255));
-        }
+    // getting points from model coordinates to canvas
+    painter.setPen(QColor(255, 0, 0, 255));
+    for (size_t i = 0; i < trianglesPoints.size(); i++)
+    {
+        trianglesPoints[i] = trianglesPoints[i] * modelViewProjectMat;
+        trianglesPoints[i].normalize();
+        int px = (trianglesPoints[i].getX() + 1) / 2 * w;
+        int py = (1 - trianglesPoints[i].getY()) / 2 * h;
+        painter.drawPoint(px, py);
+//        std::cout << (trianglesPoints[i].getX() + 1) / 2 * w << ' ' << (1 - trianglesPoints[i].getY()) / 2 * h << std::endl;
     }
 }
 

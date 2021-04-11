@@ -25,6 +25,9 @@ public:
     Vec3f operator+(const Vec3f & temp) const;
     Vec3f operator-(const Vec3f & temp) const;
 
+    // Assignment operator
+    Vec3f & operator=(const Vec3f& temp);
+
     // check for explicit and implicit inline
     float getX() const { return x_; }
     float getY() const { return y_; }

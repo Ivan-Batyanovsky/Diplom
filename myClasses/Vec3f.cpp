@@ -37,6 +37,20 @@ Vec3f Vec3f::operator-(const Vec3f & temp) const
     return Vec3f(x_ - temp.x_, y_ - temp.y_, z_ - temp.z_, w_ - temp.w_);
 }
 
+// Assignment operator
+Vec3f & Vec3f::operator=(const Vec3f& temp)
+{
+    if (this == &temp)
+        return *this;
+
+    x_ = temp.x_;
+    y_ = temp.y_;
+    z_ = temp.z_;
+    w_ = temp.w_;
+
+    return *this;
+}
+
 // Friends operators
 std::ostream & operator<<(std::ostream & os, const Vec3f & v)
 {

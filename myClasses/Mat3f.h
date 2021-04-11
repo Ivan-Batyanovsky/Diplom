@@ -25,6 +25,7 @@ public:
 
     void setPerspective(const float & angleOfView, const float & near, const float & far);
     void setOrthographic(const float l, const float r, const float b, const float t, const float n, const float f);
+    void setIdentity();
 
     Mat3f operator+(const Mat3f & temp) const;
     Mat3f operator-(const Mat3f & temp) const;

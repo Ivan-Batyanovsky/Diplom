@@ -133,10 +133,17 @@ void Mat3f::setPerspective(const float & angleOfView, const float & near, const 
     elements_[1][1] = scale;
     elements_[2][2] = -far / (far - near);
     elements_[3][2] = -far * near / (far - near);
-    elements_[2][3] = -1;
-    elements_[3][3] = 0;
+    elements_[2][3] = -1.0f;
+    elements_[3][3] = 0.0f;
 }
 
+void Mat3f::setIdentity()
+{
+    elements_[0][0] = 1.0f;
+    elements_[1][1] = 1.0f;
+    elements_[2][2] = 1.0f;
+    elements_[3][3] = 1.0f;
+}
 //Vec3f Mat3f::operator*(const Vec3f & temp) const
 //{
 //    float x = temp.getX(), y = temp.getY(), z = temp.getZ(), w = temp.getW();
