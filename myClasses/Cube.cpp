@@ -37,7 +37,7 @@ void Cube::getVertices(std::vector<Vec3f> & v) const {
 
 /*
  * Every element is Vec3f with following x_, y_, z_.
- * In total there are 12 elements: triangles with clockwise vertices order.
+ * In total there are 12 * 3 elements: triangles with clockwise vertices order.
  * Mb bugs about order. */
 void Cube::getIndexes(std::vector<Vec3f> & v) const {
     v.push_back(Vec3f(x_ + edge_, y_, z_));

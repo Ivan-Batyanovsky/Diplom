@@ -21,14 +21,16 @@ SOURCES += \
     myClasses/Buffers.cpp \
     myClasses/Cube.cpp \
     myClasses/Mat3f.cpp \
-    myClasses/Vec3f.cpp
+    myClasses/Vec3f.cpp \
+    myClasses/Vec3ui.cpp
 
 HEADERS += \
     mainwindow.h \
     myClasses/Buffers.h \
     myClasses/Cube.h \
     myClasses/Mat3f.h \
-    myClasses/Vec3f.h
+    myClasses/Vec3f.h \
+    myClasses/Vec3ui.h
 
 FORMS += \
     mainwindow.ui
