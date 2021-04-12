@@ -8,7 +8,7 @@
 #include <QPixmap>
 #include <iostream>
 #include <cmath>
-
+// To DO: z-buffer, functions, colourBuffer
 bool edgeFunction(int ax, int ay, int bx, int by, int x, int y)
 {
     return ((x - ax) * (by - ay) - (y - ay) * (bx - ax) >= 0);
@@ -103,18 +103,20 @@ void MainWindow::paintEvent(QPaintEvent *event)
             for (int x = xmin; x <= xmax; x++) {
                 if (pixelOverlapsTriangle(x0, y0, x1, y1, x2, y2, x, y))
                 {
-                    if (i == 27)
+                    if (i == 27 || i == 24)
                     {
-                         painter.setPen(QColor(0, 255, 0, 255));
-                         painter.drawPoint(x, y);
-                         painter.setPen(QColor(255, 0, 0, 255));
+                        continue;
                     }
-                    if (i == 24)
-                    {
-                         painter.setPen(QColor(255, 0, 0, 255));
+//                         painter.setPen(QColor(0, 255, 0, 255));
+                         painter.setPen(QColor(255, 7 * i, 0, 255));
                          painter.drawPoint(x, y);
-                         painter.setPen(QColor(255, 0, 0, 255));
-                    }
+
+//                    if (i == 24)
+//                    {
+//                         painter.setPen(QColor(255, 0, 0, 255));
+//                         painter.drawPoint(x, y);
+//                         painter.setPen(QColor(255, 0, 0, 255));
+//                    }
                 }
             }
         }
