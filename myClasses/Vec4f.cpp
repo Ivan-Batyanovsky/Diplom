@@ -2,43 +2,43 @@
 // Created by ivanb on 2/24/2021.
 //
 
-#include "Vec3f.h"
-#include "Mat3f.h"
+#include "Vec4f.h"
+#include "Mat44f.h"
 
 // Constructors
-Vec3f::Vec3f()
+Vec4f::Vec4f()
 {
     x_ = 0, y_ = 0, z_ = 0, w_ = 1;
 }
 
-Vec3f::Vec3f(const Vec3f & temp)
+Vec4f::Vec4f(const Vec4f & temp)
 {
     x_ = temp.x_, y_ = temp.y_, z_ = temp.z_, w_ = temp.w_;
 }
 
-Vec3f::Vec3f(const float x, const float y, const float z, const float w)
+Vec4f::Vec4f(const float x, const float y, const float z, const float w)
 {
     x_ = x, y_ = y, z_ = z, w_ = w;
 }
 
 // Destructor
-Vec3f::~Vec3f()
+Vec4f::~Vec4f()
 {
 }
 
 // Class operators
-Vec3f Vec3f::operator+(const Vec3f & temp) const
+Vec4f Vec4f::operator+(const Vec4f & temp) const
 {
-    return Vec3f(x_ + temp.x_, y_ + temp.y_, z_ + temp.z_, w_ + temp.w_);
+    return Vec4f(x_ + temp.x_, y_ + temp.y_, z_ + temp.z_, w_ + temp.w_);
 }
 
-Vec3f Vec3f::operator-(const Vec3f & temp) const
+Vec4f Vec4f::operator-(const Vec4f & temp) const
 {
-    return Vec3f(x_ - temp.x_, y_ - temp.y_, z_ - temp.z_, w_ - temp.w_);
+    return Vec4f(x_ - temp.x_, y_ - temp.y_, z_ - temp.z_, w_ - temp.w_);
 }
 
 // Assignment operator
-Vec3f & Vec3f::operator=(const Vec3f& temp)
+Vec4f & Vec4f::operator=(const Vec4f& temp)
 {
     if (this == &temp)
         return *this;
@@ -52,7 +52,7 @@ Vec3f & Vec3f::operator=(const Vec3f& temp)
 }
 
 // Friends operators
-std::ostream & operator<<(std::ostream & os, const Vec3f & v)
+std::ostream & operator<<(std::ostream & os, const Vec4f & v)
 {
     os << "--------- Vec3f -----------\n";
     os << "x: " << v.x_ << ", y: " << v.y_ << ", z: " << v.z_ << ", w: " << v.w_ << std::endl;
@@ -60,8 +60,8 @@ std::ostream & operator<<(std::ostream & os, const Vec3f & v)
     return os;
 }
 
-Vec3f operator*(Vec3f & v, Mat3f & m) {
-    Vec3f res(
+Vec4f operator*(Vec4f & v, Mat44f & m) {
+    Vec4f res(
             v.x_ * m.elements_[0][0] + v.y_ * m.elements_[1][0] + v.z_ * m.elements_[2][0] + v.w_ * m.elements_[3][0],
             v.x_ * m.elements_[0][1] + v.y_ * m.elements_[1][1] + v.z_ * m.elements_[2][1] + v.w_ * m.elements_[3][1],
             v.x_ * m.elements_[0][2] + v.y_ * m.elements_[1][2] + v.z_ * m.elements_[2][2] + v.w_ * m.elements_[3][2],

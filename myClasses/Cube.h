@@ -7,7 +7,7 @@
 
 #include <iostream>
 #include <vector>
-class Vec3f;
+class Vec4f;
 
 class Cube {
 private:
@@ -19,8 +19,8 @@ public:
     Cube();
     Cube(float x, float y, float z, float len);
 
-    void getVertices(std::vector<Vec3f> & v) const;
-    void getIndexes(std::vector<Vec3f> & v) const;
+    void getVertices(std::vector<Vec4f> & v) const;
+    void getIndexes(std::vector<Vec4f> & v) const;
 
     ~Cube();
 };

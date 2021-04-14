@@ -1,17 +1,16 @@
 #include "mainwindow.h"
 #include "myClasses/Buffers.h"
 #include "myClasses/Cube.h"
-#include "myClasses/Vec3f.h"
-#include "myClasses/Vec3ui.h"
+#include "myClasses/Vec4f.h"
 
 #include <QPaintEvent>
 #include <QPixmap>
 #include <iostream>
 #include <cmath>
-// To DO: z-buffer, functions, colourBuffer
+// To DO: z-buffer, functions, colourBuffer, projectMatrix
 bool edgeFunction(int ax, int ay, int bx, int by, int x, int y)
 {
-    return ((x - ax) * (by - ay) - (y - ay) * (bx - ax) >= 0);
+    return ((x - ax) * (by - ay) - (y - ay) * (bx - ax) >= 0); // std::numeric_limits<T>::epsilon
 }
 
 bool pixelOverlapsTriangle(int x0, int y0, int x1, int y1, int x2, int y2, int x, int y)
@@ -46,7 +45,7 @@ void MainWindow::paintEvent(QPaintEvent *event)
     Cube testCube(-0.5, -0.5, -0.5, 1);
 
     // Getting triangles(3 consecutive points from 0, 3, 6 ... vector.size() - 4 make triangle) of objects
-    std::vector<Vec3f> trianglesPoints;
+    std::vector<Vec4f> trianglesPoints;
     testCube.getIndexes(trianglesPoints);
 
     // actly do not know wtf is this so stay commented
@@ -54,7 +53,7 @@ void MainWindow::paintEvent(QPaintEvent *event)
 //    double y = 255.0 / h;
 
     // for now it's an identity matrix
-    Mat3f modelViewProjectMat;
+    Mat44f modelViewProjectMat;
     modelViewProjectMat.setIdentity();
 
     // not necessary but prefer dark background
@@ -67,12 +66,12 @@ void MainWindow::paintEvent(QPaintEvent *event)
     painter.setPen(QColor(255, 0, 0, 255));
     for (size_t i = 0; i != trianglesPoints.size(); i += 3)
     {
-        // Be careful type of points(mb ask pro for help)
-        Vec3f V0 = trianglesPoints[i] * modelViewProjectMat;
+        // Be careful with type of points(mb ask pro for help)
+        Vec4f V0 = trianglesPoints[i] * modelViewProjectMat;
         V0.normalize();
-        Vec3f V1 = trianglesPoints[i + 1] * modelViewProjectMat;
+        Vec4f V1 = trianglesPoints[i + 1] * modelViewProjectMat;
         V1.normalize();
-        Vec3f V2 = trianglesPoints[i + 2] * modelViewProjectMat;
+        Vec4f V2 = trianglesPoints[i + 2] * modelViewProjectMat;
         V2.normalize();
 
         // Computing raster space points
@@ -99,24 +98,26 @@ void MainWindow::paintEvent(QPaintEvent *event)
         if (x2 < xmin) xmin = x2;
         if (y2 < ymin) ymin = y2;
 
+        painter.setPen(QColor(0, 0, 255, 255));
         for (int y = ymin; y <= ymax; y++) {
             for (int x = xmin; x <= xmax; x++) {
                 if (pixelOverlapsTriangle(x0, y0, x1, y1, x2, y2, x, y))
                 {
-                    if (i == 27 || i == 24)
+                    if (i == 21) // 18, 21 are bugged
                     {
-                        continue;
+//                        continue;
+                        painter.setPen(QColor(0, 0, 255, 255));
+                        painter.drawPoint(x, y);
+                        painter.setPen(QColor(255, 0, 0, 255));
                     }
-//                         painter.setPen(QColor(0, 255, 0, 255));
-                         painter.setPen(QColor(255, 7 * i, 0, 255));
-                         painter.drawPoint(x, y);
-
-//                    if (i == 24)
+//                    if (i == 3)
 //                    {
+////                        continue;
 //                         painter.setPen(QColor(255, 0, 0, 255));
 //                         painter.drawPoint(x, y);
 //                         painter.setPen(QColor(255, 0, 0, 255));
 //                    }
+//                    painter.drawPoint(x, y);
                 }
             }
         }

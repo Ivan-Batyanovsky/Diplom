@@ -4,15 +4,15 @@
 // Created by ivanb on 2/24/2021.
 //
 
-#include "Mat3f.h"
-#include "Vec3f.h"
+#include "Mat44f.h"
+#include "Vec4f.h"
 #include <cmath>
 
 #define PI 3.14159265358979323846f
 
 
 // Constructors
-Mat3f::Mat3f()
+Mat44f::Mat44f()
 {
     for (size_t i = 0; i < 4; i++)
     {
@@ -21,7 +21,7 @@ Mat3f::Mat3f()
     }
 }
 
-Mat3f::Mat3f(const Mat3f & temp)
+Mat44f::Mat44f(const Mat44f & temp)
 {
     for (size_t i = 0; i < 4; i++)
     {
@@ -30,7 +30,7 @@ Mat3f::Mat3f(const Mat3f & temp)
     }
 }
 
-Mat3f::Mat3f(const std::vector<float> & temp)
+Mat44f::Mat44f(const std::vector<float> & temp)
 {
     for (size_t i = 0; i < 4; i++)
     {
@@ -40,9 +40,9 @@ Mat3f::Mat3f(const std::vector<float> & temp)
 }
 
 // Class operators
-Mat3f Mat3f::operator+(const Mat3f & temp) const
+Mat44f Mat44f::operator+(const Mat44f & temp) const
 {
-    Mat3f ret;
+    Mat44f ret;
     for (size_t i = 0; i < 4; i++)
     {
         for (size_t j = 0; j < 4; j++)
@@ -52,9 +52,9 @@ Mat3f Mat3f::operator+(const Mat3f & temp) const
     return ret;
 }
 
-Mat3f Mat3f::operator-(const Mat3f & temp) const
+Mat44f Mat44f::operator-(const Mat44f & temp) const
 {
-    Mat3f ret;
+    Mat44f ret;
     for (size_t i = 0; i < 4; i++)
     {
         for (size_t j = 0; j < 4; j++)
@@ -65,9 +65,9 @@ Mat3f Mat3f::operator-(const Mat3f & temp) const
 }
 
 
-Mat3f Mat3f::operator*(const Mat3f & temp) const
+Mat44f Mat44f::operator*(const Mat44f & temp) const
 {
-    Mat3f res;
+    Mat44f res;
     res.elements_[0][0] = elements_[0][0] * temp.elements_[0][0] + elements_[0][1] * temp.elements_[1][0] + elements_[0][2] * temp.elements_[2][0] + elements_[0][3] * temp.elements_[3][0];
     res.elements_[0][1] = elements_[0][0] * temp.elements_[0][1] + elements_[0][1] * temp.elements_[1][1] + elements_[0][2] * temp.elements_[2][1] + elements_[0][3] * temp.elements_[3][1];
     res.elements_[0][2] = elements_[0][0] * temp.elements_[0][2] + elements_[0][1] * temp.elements_[1][2] + elements_[0][2] * temp.elements_[2][2] + elements_[0][3] * temp.elements_[3][2];
@@ -91,8 +91,8 @@ Mat3f Mat3f::operator*(const Mat3f & temp) const
     return res;
 }
 
-Mat3f Mat3f::operator*(const float & temp) const {
-    Mat3f res;
+Mat44f Mat44f::operator*(const float & temp) const {
+    Mat44f res;
     for (size_t i = 0; i < 4; i++)
     {
         for (size_t j = 0; j < 4; j++)
@@ -101,13 +101,13 @@ Mat3f Mat3f::operator*(const float & temp) const {
     return res;
 }
 
-Mat3f operator*(const float multi, const Mat3f & mat)
+Mat44f operator*(const float multi, const Mat44f & mat)
 {
     return mat * multi;
 }
 //    Vec3f Vec3f::operator*(const Vec3f & temp) const; // mb vectornoe ili skalyarnoe proizvedenie
 
-std::ostream & operator<<(std::ostream & os, const Mat3f & v)
+std::ostream & operator<<(std::ostream & os, const Mat44f & v)
 {
     os << "-------- Mat3f ----------\n";
     for (size_t i = 0; i < 4; i++)
@@ -121,11 +121,11 @@ std::ostream & operator<<(std::ostream & os, const Mat3f & v)
     return os;
 }
 
-Mat3f::~Mat3f()
+Mat44f::~Mat44f()
 {
 }
 // Matrix that calls this function must be empty(every element == 0).
-void Mat3f::setPerspective(const float & angleOfView, const float & near, const float & far)
+void Mat44f::setPerspective(const float & angleOfView, const float & near, const float & far)
 {
     float scale = 1.0f / tanf(angleOfView * 0.5f * PI / 180.0f);
 
@@ -137,7 +137,7 @@ void Mat3f::setPerspective(const float & angleOfView, const float & near, const 
     elements_[3][3] = 0.0f;
 }
 
-void Mat3f::setIdentity()
+void Mat44f::setIdentity()
 {
     elements_[0][0] = 1.0f;
     elements_[1][1] = 1.0f;
@@ -157,8 +157,8 @@ void Mat3f::setIdentity()
 //    return res;
 //}
 
-Vec3f operator*(Mat3f &m, Vec3f &v) {
-    Vec3f res(
+Vec4f operator*(Mat44f &m, Vec4f &v) {
+    Vec4f res(
         v.x_ * m.elements_[0][0] + v.y_ * m.elements_[0][1] + v.z_ * m.elements_[0][2] + v.w_ * m.elements_[0][3],
         v.x_ * m.elements_[1][0] + v.y_ * m.elements_[1][1] + v.z_ * m.elements_[1][2] + v.w_ * m.elements_[1][3],
         v.x_ * m.elements_[2][0] + v.y_ * m.elements_[2][1] + v.z_ * m.elements_[2][2] + v.w_ * m.elements_[2][3],
@@ -169,7 +169,7 @@ Vec3f operator*(Mat3f &m, Vec3f &v) {
 }
 // Matrix that calls this function must be empty(every element == 0).
 // If needed check if that is correct matrix.
-void Mat3f::setOrthographic(const float l, const float r, const float b, const float t, const float n, const float f)
+void Mat44f::setOrthographic(const float l, const float r, const float b, const float t, const float n, const float f)
 {
     elements_[0][0] = 2 / (r - l);
     elements_[0][3] = - (r + l) / (r - l);
