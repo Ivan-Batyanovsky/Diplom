@@ -63,15 +63,15 @@ void Cube::getIndexes(std::vector<Vec4f> & v) const {
     v.push_back(Vec4f(x_, y_, z_ + edge_));
     v.push_back(Vec4f(x_ + edge_, y_, z_));
     v.push_back(Vec4f(x_, y_, z_));
-
+//
+    v.push_back(Vec4f(x_, y_, z_ + edge_));
+    v.push_back(Vec4f(x_ + edge_, y_ + edge_, z_ + edge_));
     v.push_back(Vec4f(x_ + edge_, y_, z_ + edge_));
-    v.push_back(Vec4f(x_, y_, z_ + edge_));
-    v.push_back(Vec4f(x_ + edge_, y_ + edge_, z_ + edge_));
 
-    v.push_back(Vec4f(x_ + edge_, y_ + edge_, z_ + edge_));
-    v.push_back(Vec4f(x_, y_, z_ + edge_));
     v.push_back(Vec4f(x_, y_ + edge_, z_ + edge_));
-
+    v.push_back(Vec4f(x_ + edge_, y_ + edge_, z_ + edge_));
+    v.push_back(Vec4f(x_, y_, z_ + edge_));
+//
     v.push_back(Vec4f(x_, y_ + edge_, z_));
     v.push_back(Vec4f(x_ + edge_, y_, z_));
     v.push_back(Vec4f(x_ + edge_, y_ + edge_, z_));

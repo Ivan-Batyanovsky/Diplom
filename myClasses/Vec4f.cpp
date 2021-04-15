@@ -56,7 +56,7 @@ std::ostream & operator<<(std::ostream & os, const Vec4f & v)
 {
     os << "--------- Vec3f -----------\n";
     os << "x: " << v.x_ << ", y: " << v.y_ << ", z: " << v.z_ << ", w: " << v.w_ << std::endl;
-    os << "--------- Vec3f -----------\n";
+    os << "--------- Vec3fEnd ------\n";
     return os;
 }
 

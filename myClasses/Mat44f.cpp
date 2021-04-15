@@ -116,7 +116,7 @@ std::ostream & operator<<(std::ostream & os, const Mat44f & v)
             os << v.elements_[i][j] << ' ';
         os << std::endl;
     }
-    os << "-------- Mat3f ----------\n";
+    os << "-------- Mat3fEnd -----\n";
 
     return os;
 }
@@ -129,11 +129,11 @@ void Mat44f::setPerspective(const float & angleOfView, const float & near, const
 {
     float scale = 1.0f / tanf(angleOfView * 0.5f * PI / 180.0f);
 
-    elements_[0][0] = scale;
+    elements_[0][0] = scale / 1.33333f;
     elements_[1][1] = scale;
-    elements_[2][2] = -far / (far - near);
-    elements_[3][2] = -far * near / (far - near);
-    elements_[2][3] = -1.0f;
+    elements_[2][2] = far + near / (far - near);
+    elements_[3][2] = -2.0f * far * near / (far - near);
+    elements_[2][3] = 1.0f;
     elements_[3][3] = 0.0f;
 }
 
