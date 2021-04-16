@@ -23,7 +23,7 @@ public:
     Mat44f(const Mat44f & temp);
     Mat44f(const std::vector<float> & temp);
 
-    void setPerspective(const float & angleOfView, const float & near, const float & far);
+    void setPerspective(const float & angleOfView, const float & near, const float & far, const float & aspect);
     void setOrthographic(const float l, const float r, const float b, const float t, const float n, const float f);
     void setIdentity();
 

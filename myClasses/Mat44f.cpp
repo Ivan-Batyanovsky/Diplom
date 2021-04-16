@@ -124,15 +124,16 @@ std::ostream & operator<<(std::ostream & os, const Mat44f & v)
 Mat44f::~Mat44f()
 {
 }
-// Matrix that calls this function must be empty(every element == 0).
-void Mat44f::setPerspective(const float & angleOfView, const float & near, const float & far)
-{
-    float scale = 1.0f / tanf(angleOfView * 0.5f * PI / 180.0f);
 
-    elements_[0][0] = scale / 1.33333f;
+// Matrix that calls this function must be empty(every element == 0).
+void Mat44f::setPerspective(const float & angleOfView, const float & near, const float & far, const float & aspect)
+{
+    float scale = 1.0f / tanf(angleOfView * PI / 360.0f);
+
+    elements_[0][0] = scale / aspect;
     elements_[1][1] = scale;
-    elements_[2][2] = far + near / (far - near);
-    elements_[3][2] = -2.0f * far * near / (far - near);
+    elements_[2][2] = (far + near) / (far - near);
+    elements_[3][2] = -2 * far * near / (far - near);
     elements_[2][3] = 1.0f;
     elements_[3][3] = 0.0f;
 }

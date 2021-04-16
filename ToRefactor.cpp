@@ -11,6 +11,7 @@ bool edgeFunction(int ax, int ay, int bx, int by, int x, int y)
     return ((x - ax) * (by - ay) - (y - ay) * (bx - ax) >= 0); // std::numeric_limits<T>::epsilon
 }
 
+// otrisovat rebra, optimize na rebre, PROVERKA NA 0,
 bool pixelOverlapsTriangle(int x0, int y0, int x1, int y1, int x2, int y2, int x, int y)
 {
     bool inside = true;
@@ -34,14 +35,14 @@ void colorBackground(QPainter & painter, size_t w, size_t h)
 void loadPoints(std::vector<Vec4f> & trianglesPoints)
 {
     // init objects to draw
-    Cube testCube(-0.5, -0.5, -0.5, 1);
+    Cube testCube(-1.0f, -1.0f, -6.0f, 2.0f);
     testCube.getIndexes(trianglesPoints);
 }
 
-void initMVPmatrix(Mat44f & modelViewProjectMat)
+void initMVPmatrix(Mat44f & modelViewProjectMat, size_t w, size_t h)
 {
-//    modelViewProjectMat.setPerspective(45.0f, -1.0f, 10.0f);
-    modelViewProjectMat.setIdentity();
+    modelViewProjectMat.setPerspective(45.0f, -2.0f, -10.0f, w / float(h));
+//    modelViewProjectMat.setIdentity();
     std::cout << modelViewProjectMat;
 }
 
@@ -76,8 +77,11 @@ void renderScene(QPainter & painter, std::vector<Vec4f> & trianglesPoints, Mat44
     {
         // Triangle vertices
         Vec4f V0 = trianglesPoints[i] * modelViewProjectMat;
+        V0.normalize();
         Vec4f V1 = trianglesPoints[i + 1] * modelViewProjectMat;
+        V1.normalize();
         Vec4f V2 = trianglesPoints[i + 2] * modelViewProjectMat;
+        V2.normalize();
 
         // Computing raster space points of triangle vertices
         int x0 = convertToPixelX(V0, w);
@@ -93,18 +97,23 @@ void renderScene(QPainter & painter, std::vector<Vec4f> & trianglesPoints, Mat44
         findBoundingBox(x0, y0, x1, y1, x2, y2, xmin, ymin, xmax, ymax);
 
         painter.setPen(QColor(0, 0, 255, 255));
+
+//        std::cout << "i= " << i << std::endl << V0 << V1 << V2;
+//        std::cout << trianglesPoints[i] << " " << trianglesPoints[i + 1] << " " << trianglesPoints[i + 2] << std::endl;
+//        if (i != 12)
+//            continue;
+//        if (i == 12)
+//             std::cout << x0 << ' ' << y0 << ' ' <<   x1 << ' ' << y1 << ' '  << x2 << ' ' << y2 << std::endl;
         for (int y = ymin; y <= ymax; y++) {
             for (int x = xmin; x <= xmax; x++) {
                 if (pixelOverlapsTriangle(x0, y0, x1, y1, x2, y2, x, y))
                 {
-//                    if (i == 21 || i == 18) // 18, 21 are bugged
-//                    {
-//                        std::cout << V0 << V1 << V2;
-//                        std::cout << x0 << ' ' << y0 << ' ' <<   x1 << ' ' << y1 << ' '  << x2 << ' ' << y2 << std::endl;
-                        painter.setPen(QColor(0, 0, 255, 255));
+                    if (i == 18 || i == 21)
+                    {
+                        continue;
+                    }
+                        painter.setPen(QColor( (i + 1)*7, 0, 12 * ((i + 1) % 12), 255));
                         painter.drawPoint(x, y);
-                        painter.setPen(QColor(255, 0, 0, 255));
-//                    }
                 }
             }
         }

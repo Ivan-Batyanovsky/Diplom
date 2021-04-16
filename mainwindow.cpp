@@ -20,6 +20,14 @@ MainWindow::~MainWindow()
 
 }
 
+void MainWindow::keyPressEvent(QKeyEvent *event)
+{
+    switch (event->key()) {
+        case Qt::Key_K:
+            std::cout << "YEP\n";
+    }
+}
+
 void MainWindow::paintEvent(QPaintEvent *event)
 {
     size_t w = static_cast<size_t>(geometry().width());
@@ -32,7 +40,7 @@ void MainWindow::paintEvent(QPaintEvent *event)
     loadPoints(trianglesPoints);
 
     Mat44f modelViewProjectMat;
-    initMVPmatrix(modelViewProjectMat);
+    initMVPmatrix(modelViewProjectMat, w, h);
 
     colorBackground(painter, w, h);
 
