@@ -13,5 +13,7 @@ void renderScene(QPainter & painter, std::vector<Vec4f> & trianglesPoints, Mat44
 int convertToPixelX(float x);
 int convertToPixelY(float y);
 void findBoundingBox(int x0, int y0, int x1, int y1, int x2, int y2, int & xmin, int & ymin, int & xmax, int & ymax);
-
+void makeScaling(std::vector<Vec4f> & trianglesPoints, Vec4f koefVec);
+void makeTranslation(std::vector<Vec4f> & trianglesPoints, Vec4f koefVec);
+void makeRotation(std::vector<Vec4f> & trianglesPoints, Vec4f anglesVec);
 #endif // TOREFACTOR_H

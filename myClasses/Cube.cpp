@@ -40,50 +40,62 @@ void Cube::getVertices(std::vector<Vec4f> & v) const {
  * In total there are 12 * 3 elements: triangles with clockwise vertices order.
  * Mb bugs about order. */
 void Cube::getIndexes(std::vector<Vec4f> & v) const {
+   //0
     v.push_back(Vec4f(x_ + edge_, y_, z_));
     v.push_back(Vec4f(x_ + edge_, y_, z_ + edge_));
     v.push_back(Vec4f(x_ + edge_, y_ + edge_, z_));
 
+    //3
     v.push_back(Vec4f(x_ + edge_, y_ + edge_, z_));
     v.push_back(Vec4f(x_ + edge_, y_, z_ + edge_));
     v.push_back(Vec4f(x_ + edge_, y_ + edge_, z_ + edge_));
 
+    //6
     v.push_back(Vec4f(x_ + edge_, y_ + edge_, z_));
     v.push_back(Vec4f(x_ + edge_, y_ + edge_, z_ + edge_));
     v.push_back(Vec4f(x_, y_ + edge_, z_));
 
+    //9
     v.push_back(Vec4f(x_, y_ + edge_, z_));
     v.push_back(Vec4f(x_ + edge_, y_ + edge_, z_ + edge_));
     v.push_back(Vec4f(x_, y_ + edge_, z_ + edge_));
 
+    //12
     v.push_back(Vec4f(x_ + edge_, y_, z_));
     v.push_back(Vec4f(x_, y_, z_ + edge_));
     v.push_back(Vec4f(x_ + edge_, y_, z_ + edge_));
 
+    //15
     v.push_back(Vec4f(x_, y_, z_ + edge_));
     v.push_back(Vec4f(x_ + edge_, y_, z_));
     v.push_back(Vec4f(x_, y_, z_));
-//
+
+    //18
     v.push_back(Vec4f(x_, y_, z_ + edge_));
     v.push_back(Vec4f(x_ + edge_, y_, z_ + edge_));
     v.push_back(Vec4f(x_ + edge_, y_ + edge_, z_ + edge_));
 
+    //21
     v.push_back(Vec4f(x_ + edge_, y_ + edge_, z_ + edge_));
-    v.push_back(Vec4f(x_, y_ + edge_, z_ + edge_));
     v.push_back(Vec4f(x_, y_, z_ + edge_));
-//
+    v.push_back(Vec4f(x_, y_ + edge_, z_ + edge_));
+
+    //24
     v.push_back(Vec4f(x_, y_ + edge_, z_));
     v.push_back(Vec4f(x_ + edge_, y_, z_));
     v.push_back(Vec4f(x_ + edge_, y_ + edge_, z_));
 
+    //27
     v.push_back(Vec4f(x_, y_, z_));
     v.push_back(Vec4f(x_ + edge_, y_, z_));
     v.push_back(Vec4f(x_, y_ + edge_, z_));
 
+    //30
     v.push_back(Vec4f(x_, y_, z_));
     v.push_back(Vec4f(x_, y_ + edge_, z_ + edge_));
     v.push_back(Vec4f(x_, y_, z_ + edge_));
 
+    //33
     v.push_back(Vec4f(x_, y_ + edge_, z_));
     v.push_back(Vec4f(x_, y_ + edge_, z_ + edge_));
     v.push_back(Vec4f(x_, y_, z_));

@@ -8,6 +8,7 @@
 #define DIPLOM_VEC3F_H
 
 #include <iostream>
+#include <cmath>
 #include "Mat44f.h"
 class Mat44f;
 
@@ -34,11 +35,16 @@ public:
     float getZ() const { return z_; }
     float getW() const { return w_; }
 
-    void normalize() { x_ /= w_ , y_ /= w_, z_ /= w_, w_ = 1.0f; }
+    void divByW() { x_ /= w_ , y_ /= w_, z_ /= w_, w_ = 1.0f; }
+    float getLength() const {return sqrtf(x_ * x_ + y_ * y_ + z_ * z_);}
+    Vec4f normalize() const;
 
     friend std::ostream & operator<<(std::ostream & os, const Vec4f & v);
     friend Vec4f operator*(Vec4f & v, Mat44f & m);
     friend Vec4f operator*(Mat44f & m, Vec4f & v);
+    friend Vec4f vecMul(const Vec4f & f, const Vec4f & s);
+    friend float skalMul(const Vec4f & f, const Vec4f & s);
+
     ~Vec4f();
 };
 

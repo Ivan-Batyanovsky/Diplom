@@ -51,6 +51,16 @@ Vec4f & Vec4f::operator=(const Vec4f& temp)
     return *this;
 }
 
+Vec4f Vec4f::normalize() const
+{
+    float len = this->getLength();
+
+    return Vec4f(x_ / len, y_ / len, z_ / len);
+}
+
+// Class methods
+
+
 // Friends operators
 std::ostream & operator<<(std::ostream & os, const Vec4f & v)
 {
@@ -69,4 +79,14 @@ Vec4f operator*(Vec4f & v, Mat44f & m) {
             );
 
     return res;
+}
+
+Vec4f vecMul(const Vec4f & f, const Vec4f & s)
+{
+    return Vec4f(f.y_ * s.z_ - f.z_ * s.y_, f.z_ * s.x_ - f.x_ * s.z_, f.x_ * s.y_ - f.y_ * s.x_);
+}
+
+float skalMul(const Vec4f & f, const Vec4f & s)
+{
+    return (f.x_ * s.x_ + f.y_ * s.y_ + f.z_ * s.z_);
 }

@@ -9,7 +9,7 @@
 
 #include <iostream>
 #include <vector>
-#include "Vec4f.h"
+//#include "Vec4f.h"
 
 class Vec4f;
 //ctrl shift r
@@ -26,6 +26,12 @@ public:
     void setPerspective(const float & angleOfView, const float & near, const float & far, const float & aspect);
     void setOrthographic(const float l, const float r, const float b, const float t, const float n, const float f);
     void setIdentity();
+    void setTranslation(Vec4f temp);
+    void setScaling(Vec4f temp);
+    void setRotationX(Vec4f temp);
+    void setRotationY(Vec4f temp);
+    void setRotationZ(Vec4f temp);
+
 
     Mat44f operator+(const Mat44f & temp) const;
     Mat44f operator-(const Mat44f & temp) const;

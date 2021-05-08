@@ -145,6 +145,56 @@ void Mat44f::setIdentity()
     elements_[2][2] = 1.0f;
     elements_[3][3] = 1.0f;
 }
+
+void Mat44f::setTranslation(Vec4f temp)
+{
+    elements_[0][0] = 1.0f;
+    elements_[1][1] = 1.0f;
+    elements_[2][2] = 1.0f;
+    elements_[3][3] = 1.0f;
+
+    elements_[0][3] = temp.getX();
+    elements_[1][3] = temp.getY();
+    elements_[2][3] = temp.getZ();
+}
+
+void Mat44f::setScaling(Vec4f temp)
+{
+    elements_[0][0] = temp.getX();
+    elements_[1][1] = temp.getY();
+    elements_[2][2] = temp.getZ();
+    elements_[3][3] = 1.0f;
+}
+
+void Mat44f::setRotationX(Vec4f temp)
+{
+    elements_[0][0] = 1.0f;
+    elements_[1][1] = cos(temp.getX());
+    elements_[1][2] = -sin(temp.getX());
+    elements_[2][1] = sin(temp.getX());
+    elements_[2][2] = cos(temp.getX());
+    elements_[3][3] = 1.0f;
+}
+
+void Mat44f::setRotationY(Vec4f temp)
+{
+    elements_[0][0] = cos(temp.getY());
+    elements_[0][2] = sin(temp.getY());
+    elements_[1][1] =1.0f;
+    elements_[2][0] = -sin(temp.getY());
+    elements_[2][2] = cos(temp.getY());
+    elements_[3][3] = 1.0f;
+}
+
+void Mat44f::setRotationZ(Vec4f temp)
+{
+    elements_[0][0] = cos(temp.getZ());
+    elements_[0][1] = -sin(temp.getZ());
+    elements_[1][0] = sin(temp.getZ());
+    elements_[1][1] = cos(temp.getZ());
+    elements_[2][2] = 1.0f;
+    elements_[3][3] = 1.0f;
+}
 //Vec3f Mat3f::operator*(const Vec3f & temp) const
 //{
 //    float x = temp.getX(), y = temp.getY(), z = temp.getZ(), w = temp.getW();
