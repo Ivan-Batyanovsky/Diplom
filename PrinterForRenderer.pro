@@ -22,6 +22,7 @@ SOURCES += \
     myClasses/Buffers.cpp \
     myClasses/Cube.cpp \
     myClasses/Mat44f.cpp \
+    myClasses/Renderbase.cpp \
     myClasses/Vec4f.cpp
 
 HEADERS += \
@@ -30,6 +31,7 @@ HEADERS += \
     myClasses/Buffers.h \
     myClasses/Cube.h \
     myClasses/Mat44f.h \
+    myClasses/Renderbase.h \
     myClasses/Vec4f.h
 
 FORMS += \

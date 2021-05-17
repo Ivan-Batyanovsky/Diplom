@@ -195,6 +195,11 @@ void Mat44f::setRotationZ(Vec4f temp)
     elements_[2][2] = 1.0f;
     elements_[3][3] = 1.0f;
 }
+
+float Mat44f::getElement(size_t i, size_t j) const
+{
+    return elements_[i][j];
+}
 //Vec3f Mat3f::operator*(const Vec3f & temp) const
 //{
 //    float x = temp.getX(), y = temp.getY(), z = temp.getZ(), w = temp.getW();

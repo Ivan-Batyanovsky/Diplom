@@ -31,7 +31,7 @@ public:
     void setRotationX(Vec4f temp);
     void setRotationY(Vec4f temp);
     void setRotationZ(Vec4f temp);
-
+    float getElement(size_t i, size_t j) const;
 
     Mat44f operator+(const Mat44f & temp) const;
     Mat44f operator-(const Mat44f & temp) const;

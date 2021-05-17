@@ -3,6 +3,7 @@
 
 #include <QMainWindow>
 #include <QPainter>
+#include "myClasses/Renderbase.h"
 
 class MainWindow : public QWidget
 {
@@ -18,7 +19,7 @@ protected:
     void paintEvent(QPaintEvent *event) override;
 
 private:
-
+    RenderBase Render_;
 };
 
 #endif // MAINWINDOW_H

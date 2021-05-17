@@ -35,7 +35,8 @@ namespace Buffers
         // Class methods
         void resize(const uint32_t rows, const uint32_t columns);
         void clear(const uchar4 colour = {1,255,1,1});
-
+        uint32_t getColumns() {return columns_;}
+        uint32_t getRows() {return rows_;}
         void set(const int row, const int column, const uchar4 & pixel) { data_[row][column] = pixel; };
         uchar4 get(const int row, const int column) const { return data_[row][column]; };
 
