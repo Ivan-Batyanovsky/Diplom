@@ -1,7 +1,7 @@
 //
 // Created by ivanb on 2/26/2021.
 //
-
+#include "Vec4f.h"
 #include "Cube.h"
 //#include <vector>
 Cube::Cube()
@@ -20,12 +20,12 @@ Cube::Cube(float x, float y, float z, float len)
     edge_ = len;
 }
 
-Cube::Cube(const Vec4f & posAndEdge)
+Cube::Cube(Vec4f vec)
 {
-    x_ = posAndEdge.getX();
-    y_ = posAndEdge.getY();
-    z_ = posAndEdge.getZ();
-    edge_ = posAndEdge.getW();
+    x_ = vec.getX();
+    y_ = vec.getY();
+    z_ = vec.getZ();
+    edge_ = vec.getW();
 }
 /*
  * Every element is Vec3f with following x_, y_, z_.

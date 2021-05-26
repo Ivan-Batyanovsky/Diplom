@@ -110,7 +110,7 @@ void initMVPmatrix(Mat44f & modelViewProjectMat, size_t w, size_t h)
     float angleOfView = 45.0f, near = -2.0f, far = -50.0f;
     modelViewProjectMat.setPerspective(angleOfView, near, far, w / float(h));
 //    modelViewProjectMat.setIdentity();
-    std::cout << modelViewProjectMat;
+//    std::cout << modelViewProjectMat;
 }
 
 void findBoundingBox(int x0, int y0, int x1, int y1, int x2, int y2, int & xmin, int & ymin, int & xmax, int & ymax)
@@ -138,7 +138,7 @@ int convertToPixelY(Vec4f & y, const size_t h)
     return (1 - y.getY()) / 2 * h;
 }
 
-void renderScene(QPainter & painter, std::vector<Vec4f> & trianglesPoints, Mat44f & modelViewProjectMat, size_t w, size_t h)
+void renderScene(QPainter & painter, std::vector<Vec4f> trianglesPoints, Mat44f modelViewProjectMat, size_t w, size_t h)
 {
     for (size_t i = 0; i != trianglesPoints.size(); i += 3)
     {

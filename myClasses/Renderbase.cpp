@@ -1,41 +1,36 @@
-#include "myClasses/Renderbase.h"
+#include "Renderbase.h"
 
 RenderBase::RenderBase()
 {
     scaleKoefs_ = {1.0f, 1.0f, 1.0f, 1.0f};
-    translateKoefs_ = {0.0f, 0.0f, 0.0f, 1.0f};
-    rotateAngle_ = {0.0f, 0.0f, 0.0f, 1.0f};
-
-    modelViewProjectMat_.setIdentity();
-    trianglesPoints_ = {};
-    clBuffer_ = {};
-    zBuffer_ = {};
+    translateKoefs_ = {0.0f, 0.0f, 0.0f, 0.0f};
+    rotateAngle_ = {0.0f, 0.0f, 0.0f, 0.0f};
 }
 
-void RenderBase::loadCube(const Vec4f posAndEdge)
+int RenderBase::convertToPixelX(Vec4f & x, const size_t w)
 {
-    Cube testCube(posAndEdge);
-    testCube.getIndexes(trianglesPoints_);
+    return (x.getX() + 1) / 2 * w;
 }
 
-void RenderBase::resizeBuffers(const size_t w, const size_t h)
+int RenderBase::convertToPixelY(Vec4f & y, const size_t h)
 {
-    if (clBuffer_.getRows() != h || clBuffer_.getColumns() != w)
-    {
-        clBuffer_.resize(h, w);
-        zBuffer_.resize(h, w);
-    }
+    return (1 - y.getY()) / 2 * h;
 }
 
-void RenderBase::setMVPmatrix(size_t w , size_t h)
+bool RenderBase::pixelOverlapsTriangle(int x0, int y0, int x1, int y1, int x2, int y2, int x, int y, float & w0, float & w1, float & w2)
 {
-    float angleOfView = 45.0f, near = -2.0f, far = -50.0f;
-//    modelViewProjectMat_.setIdentity();
-    modelViewProjectMat_.setPerspective(angleOfView, near, far, w / float(h));
-//    std::cout << modelViewProjectMat_;
-}
+    w0 = edgeFunction(x1, y1, x2, y2, x, y);
+    if (w0 < 0) return false;
 
-void RenderBase::findBoundingBox(int x0, int y0, int x1, int y1, int x2, int y2, int &xmin, int &ymin, int &xmax, int &ymax)
+    w1 = edgeFunction(x2, y2, x0, y0, x, y);
+    if (w1 < 0) return false;
+
+    w2 = edgeFunction(x0, y0, x1, y1, x, y);
+    if (w2 < 0) return false;
+
+    return true;
+}
+void RenderBase::findBoundingBox(int x0, int y0, int x1, int y1, int x2, int y2, int & xmin, int & ymin, int & xmax, int & ymax)
 {
     if (x0 > xmax) xmax = x0;
     if (y0 > ymax) ymax = y0;
@@ -51,18 +46,14 @@ void RenderBase::findBoundingBox(int x0, int y0, int x1, int y1, int x2, int y2,
     if (y2 < ymin) ymin = y2;
 }
 
-bool RenderBase::pixelOverlapsTriangle(int x0, int y0, int x1, int y1, int x2, int y2, int x, int y, float &w0, float &w1, float &w2)
+
+
+void RenderBase::initMVPmatrix(size_t w, size_t h)
 {
-    w0 = edgeFunction(x1, y1, x2, y2, x, y);
-    if (w0 < 0) return false;
-
-    w1 = edgeFunction(x2, y2, x0, y0, x, y);
-    if (w1 < 0) return false;
-
-    w2 = edgeFunction(x0, y0, x1, y1, x, y);
-    if (w2 < 0) return false;
-
-    return true;
+    float angleOfView = 45.0f, near = -2.0f, far = -50.0f;
+//    modelViewProjectMat_.setIdentity();
+    modelViewProjectMat_.setPerspective(angleOfView, near, far, w / float(h));
+    //    std::cout << modelViewProjectMat_;
 }
 
 Mat44f RenderBase::getRotation() const
@@ -97,27 +88,50 @@ Mat44f RenderBase::getTranslation() const
     return translationMatrix;
 }
 
-void RenderBase::renderScene(QPainter &painter, size_t w, size_t h)
+void RenderBase::loadCube(Cube cube)
 {
+    cube.getIndexes(trianglesPoints_);
+}
+
+void RenderBase::resizeBuffers(size_t w, size_t h)
+{
+    if ((w != clBuffer_.getWidth()) || (h != clBuffer_.getHeight()))
+    {
+        clBuffer_.resize(w, h);
+        zBuffer_.resize(w, h);
+    }
+}
+
+float RenderBase::edgeFunction(float ax, float ay, float bx, float by, float x, float y)
+{
+    return ((x - ax) * (by - ay) - (y - ay) * (bx - ax)); // std::numeric_limits<T>::epsilon
+}
+
+void RenderBase::renderScene(QPainter & painter, size_t w, size_t h)
+{
+    Mat44f translateMatrix = getTranslation();
+    Mat44f rotateMatrix = getRotation();
+    Mat44f sclaeMatrix = getScaling();
+
     for (size_t i = 0; i != trianglesPoints_.size(); i += 3)
     {
         // Triangle vertices
-        Mat44f trans = getTranslation();
-        Vec4f V0 =  trans * trianglesPoints_[i];
+        Vec4f V0 = translateMatrix * trianglesPoints_[i];
+            V0 = rotateMatrix * V0;
+            V0 = sclaeMatrix * V0;
             V0 = V0 * modelViewProjectMat_;
-        Vec4f V1 = trans * trianglesPoints_[i + 1];
+        Vec4f V1 = translateMatrix * trianglesPoints_[i + 1];
+            V1 = rotateMatrix * V1;
+            V1 = sclaeMatrix * V1;
             V1 = V1 * modelViewProjectMat_;
-        Vec4f V2 = trans * trianglesPoints_[i + 2];
-            V2 = V2* modelViewProjectMat_;
+        Vec4f V2 = translateMatrix * trianglesPoints_[i + 2];
+            V2 = rotateMatrix* V2;
+            V2 = sclaeMatrix * V2;
+            V2 = V2 * modelViewProjectMat_;
+
         V0.divByW();
         V1.divByW();
         V2.divByW();
-//        Mat44f rotateMatrix = getRotation();
-        Mat44f rotateMatrix = getTranslation();
-        Mat44f scaleMatrix = getScaling();
-        V0 = V0 * rotateMatrix;
-        V1 = V1 * rotateMatrix;
-        V2 = V2 * rotateMatrix;
 
         // Barycentric Coordinates
         float w0, w1, w2, area;
@@ -148,13 +162,9 @@ void RenderBase::renderScene(QPainter &painter, size_t w, size_t h)
         int xmin = INT_MAX, ymin= INT_MAX;
         findBoundingBox(x0, y0, x1, y1, x2, y2, xmin, ymin, xmax, ymax);
 
-        // Init buffers(colour and depth respectively)
-//        Buffers::ColourBuffer clBuffer(w, h);
-//        Buffers::fDepthBuffer zBuffer(w, h);
-
 //        std::cout << - (V2.getY() -  V0.getY()) * (V1.getX() - V0.getX()) << ' ' << area << std::endl;
 //        std::cout << "i= " << i << std::endl << V0 << V1 << V2;
-//        std::cout << trianglesPoints[i] << " " << trianglesPoints[i + 1] << " " << trianglesPoints[i + 2] << std::endl;
+//        std::cout << trianglesPoints_[i] << " " << trianglesPoints_[i + 1] << " " << trianglesPoints_[i + 2] << std::endl;
 //        if (i != 12)
 //            continue;
 //        if (i == 12)
@@ -177,10 +187,10 @@ void RenderBase::renderScene(QPainter &painter, size_t w, size_t h)
 //                    if (i != 21)
 //                        continue;
 
-                                        if (i == 21 || i == 18)
-                                        {
-                                            continue;
-                                        }
+                    if (i == 21 || i == 18)
+                    {
+                        continue;
+                    }
                     // Colouring edges green
                     if (abs(w0) < std::numeric_limits<float>::epsilon() ||
                             abs(w1) < std::numeric_limits<float>::epsilon() ||

@@ -16,6 +16,7 @@ DEFINES += QT_DEPRECATED_WARNINGS
 #DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
 
 SOURCES += \
+    myClasses/Renderbase.cpp \
     ToRefactor.cpp \
     main.cpp \
     mainwindow.cpp \
@@ -26,6 +27,7 @@ SOURCES += \
     myClasses/Vec4f.cpp
 
 HEADERS += \
+    myClasses/Renderbase.h \
     ToRefactor.h \
     mainwindow.h \
     myClasses/Buffers.h \

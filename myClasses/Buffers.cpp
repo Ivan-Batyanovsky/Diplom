@@ -11,7 +11,7 @@ Buffers::ColourBuffer::ColourBuffer() {
     columns_ = 0;
 }
 
-Buffers::ColourBuffer::ColourBuffer(const uint32_t rows, const uint32_t columns) {
+Buffers::ColourBuffer::ColourBuffer(const size_t rows, const size_t columns) {
     rows_ = rows;
     columns_ = columns;
     data_ = std::vector< std::vector<uchar4> > (rows, std::vector<uchar4> (columns));
@@ -22,8 +22,8 @@ Buffers::ColourBuffer::ColourBuffer(const Buffers::ColourBuffer & buffer) {
     columns_ = buffer.columns_;
 
     data_ = std::vector< std::vector<uchar4> > (buffer.rows_, std::vector<uchar4> (buffer.columns_));
-    for (uint32_t i = 0; i < rows_; ++i) {
-        for (uint32_t j = 0; j < columns_; ++j) {
+    for (size_t i = 0; i < rows_; ++i) {
+        for (size_t j = 0; j < columns_; ++j) {
             data_[i][j] = buffer.data_[i][j];
         }
     }
@@ -36,10 +36,9 @@ Buffers::ColourBuffer & Buffers::ColourBuffer::operator=(const Buffers::ColourBu
     rows_ = buffer.rows_;
     columns_ = buffer.columns_;
 
-    // Bad practice?
     data_ = std::vector< std::vector<uchar4> > (buffer.rows_, std::vector<uchar4> (buffer.columns_));
-    for (uint32_t i = 0; i < rows_; ++i) {
-        for (uint32_t j = 0; j < columns_; ++j) {
+    for (size_t i = 0; i < rows_; ++i) {
+        for (size_t j = 0; j < columns_; ++j) {
             data_[i][j] = buffer.data_[i][j];
         }
     }
@@ -47,21 +46,22 @@ Buffers::ColourBuffer & Buffers::ColourBuffer::operator=(const Buffers::ColourBu
     return *this;
 }
 
-void Buffers::ColourBuffer::resize(const uint32_t rows, const uint32_t columns) {
-    columns_ = columns;
-    rows_ = rows;
-    data_ = std::vector< std::vector<uchar4> > (rows_, std::vector<uchar4> (columns_));
+void Buffers::ColourBuffer::resize(const size_t width, const size_t height) {
+    columns_ = width;
+    rows_ = height;
+    data_ = std::vector< std::vector<uchar4> > (height, std::vector<uchar4> (width));
 }
 
 void Buffers::ColourBuffer::clear(const uchar4 colour) { // Bad practice?
-    for (uint32_t i = 0; i < rows_; ++i) {
-        for (uint32_t j = 0; j < columns_; ++j) {
+    for (size_t i = 0; i < rows_; ++i) {
+        for (size_t j = 0; j < columns_; ++j) {
             data_[i][j] = colour;
         }
     }
 }
 
-Buffers::ColourBuffer::~ColourBuffer() { // Bad practice?
+Buffers::ColourBuffer::~ColourBuffer()
+{
 }
 
 // Friends
@@ -87,10 +87,10 @@ Buffers::fDepthBuffer::fDepthBuffer() {
     columns_ = 0;
 }
 
-Buffers::fDepthBuffer::fDepthBuffer(const uint32_t rows, const uint32_t columns) {
-    rows_ = rows;
-    columns_ = columns;
-    data_ = std::vector<std::vector<float> > (rows, std::vector<float> (columns));
+Buffers::fDepthBuffer::fDepthBuffer(const size_t width, const size_t height) {
+    rows_ = height;
+    columns_ = width;
+    data_ = std::vector<std::vector<float> > (height, std::vector<float> (width));
 }
 
 // Copy operator
@@ -99,8 +99,8 @@ Buffers::fDepthBuffer::fDepthBuffer(const Buffers::fDepthBuffer & buffer) {
     rows_ = buffer.columns_;
 
     data_ = std::vector< std::vector<float> > (buffer.rows_, std::vector<float> (buffer.columns_));
-    for (uint32_t i = 0; i < rows_; ++i) {
-        for (uint32_t j = 0; j < columns_; ++j) {
+    for (size_t i = 0; i < rows_; ++i) {
+        for (size_t j = 0; j < columns_; ++j) {
             data_[i][j] = buffer.data_[i][j];
         }
     }
@@ -115,8 +115,8 @@ Buffers::fDepthBuffer & Buffers::fDepthBuffer::operator=(const Buffers::fDepthBu
     columns_ = buffer.columns_;
 
     data_ = std::vector< std::vector<float> > (buffer.rows_, std::vector<float> (buffer.columns_));
-    for (uint32_t i = 0; i < rows_; ++i) {
-        for (uint32_t j = 0; j < columns_; ++j) {
+    for (size_t i = 0; i < rows_; ++i) {
+        for (size_t j = 0; j < columns_; ++j) {
             data_[i][j] = buffer.data_[i][j];
         }
     }
@@ -125,18 +125,18 @@ Buffers::fDepthBuffer & Buffers::fDepthBuffer::operator=(const Buffers::fDepthBu
 }
 
 // Class methods
-void Buffers::fDepthBuffer::resize(const uint32_t rows, const uint32_t columns, const float depth) {
-    rows_ = rows;
-    columns_ = columns;
+void Buffers::fDepthBuffer::resize(const size_t width, const size_t height) {
+    rows_ = height;
+    columns_ = width;
 
-    data_ = std::vector< std::vector<float> > (rows_, std::vector<float> (columns_ , depth));
+    data_ = std::vector< std::vector<float> > (height, std::vector<float> (width));
 }
 
 void Buffers::fDepthBuffer::clear(const float depth) {
     data_ = std::vector< std::vector<float> > (rows_, std::vector<float> (columns_ , depth)); // Bad practice?
 }
 
-Buffers::fDepthBuffer::~fDepthBuffer() { // Bad practice?
+Buffers::fDepthBuffer::~fDepthBuffer() {
 }
 
 // Friends
