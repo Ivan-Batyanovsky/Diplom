@@ -1,8 +1,13 @@
+<<<<<<< HEAD
 #include "Renderbase.h"
+=======
+#include "myClasses/Renderbase.h"
+>>>>>>> master
 
 RenderBase::RenderBase()
 {
     scaleKoefs_ = {1.0f, 1.0f, 1.0f, 1.0f};
+<<<<<<< HEAD
     translateKoefs_ = {0.0f, 0.0f, 0.0f, 0.0f};
     rotateAngle_ = {0.0f, 0.0f, 0.0f, 0.0f};
 }
@@ -31,6 +36,41 @@ bool RenderBase::pixelOverlapsTriangle(int x0, int y0, int x1, int y1, int x2, i
     return true;
 }
 void RenderBase::findBoundingBox(int x0, int y0, int x1, int y1, int x2, int y2, int & xmin, int & ymin, int & xmax, int & ymax)
+=======
+    translateKoefs_ = {0.0f, 0.0f, 0.0f, 1.0f};
+    rotateAngle_ = {0.0f, 0.0f, 0.0f, 1.0f};
+
+    modelViewProjectMat_.setIdentity();
+    trianglesPoints_ = {};
+    clBuffer_ = {};
+    zBuffer_ = {};
+}
+
+void RenderBase::loadCube(const Vec4f posAndEdge)
+{
+    Cube testCube(posAndEdge);
+    testCube.getIndexes(trianglesPoints_);
+}
+
+void RenderBase::resizeBuffers(const size_t w, const size_t h)
+{
+    if (clBuffer_.getRows() != h || clBuffer_.getColumns() != w)
+    {
+        clBuffer_.resize(h, w);
+        zBuffer_.resize(h, w);
+    }
+}
+
+void RenderBase::setMVPmatrix(size_t w , size_t h)
+{
+    float angleOfView = 45.0f, near = -2.0f, far = -50.0f;
+//    modelViewProjectMat_.setIdentity();
+    modelViewProjectMat_.setPerspective(angleOfView, near, far, w / float(h));
+//    std::cout << modelViewProjectMat_;
+}
+
+void RenderBase::findBoundingBox(int x0, int y0, int x1, int y1, int x2, int y2, int &xmin, int &ymin, int &xmax, int &ymax)
+>>>>>>> master
 {
     if (x0 > xmax) xmax = x0;
     if (y0 > ymax) ymax = y0;
@@ -46,6 +86,7 @@ void RenderBase::findBoundingBox(int x0, int y0, int x1, int y1, int x2, int y2,
     if (y2 < ymin) ymin = y2;
 }
 
+<<<<<<< HEAD
 
 
 void RenderBase::initMVPmatrix(size_t w, size_t h)
@@ -54,6 +95,20 @@ void RenderBase::initMVPmatrix(size_t w, size_t h)
 //    modelViewProjectMat_.setIdentity();
     modelViewProjectMat_.setPerspective(angleOfView, near, far, w / float(h));
     //    std::cout << modelViewProjectMat_;
+=======
+bool RenderBase::pixelOverlapsTriangle(int x0, int y0, int x1, int y1, int x2, int y2, int x, int y, float &w0, float &w1, float &w2)
+{
+    w0 = edgeFunction(x1, y1, x2, y2, x, y);
+    if (w0 < 0) return false;
+
+    w1 = edgeFunction(x2, y2, x0, y0, x, y);
+    if (w1 < 0) return false;
+
+    w2 = edgeFunction(x0, y0, x1, y1, x, y);
+    if (w2 < 0) return false;
+
+    return true;
+>>>>>>> master
 }
 
 Mat44f RenderBase::getRotation() const
@@ -88,6 +143,7 @@ Mat44f RenderBase::getTranslation() const
     return translationMatrix;
 }
 
+<<<<<<< HEAD
 void RenderBase::loadCube(Cube cube)
 {
     cube.getIndexes(trianglesPoints_);
@@ -132,6 +188,29 @@ void RenderBase::renderScene(QPainter & painter, size_t w, size_t h)
         V0.divByW();
         V1.divByW();
         V2.divByW();
+=======
+void RenderBase::renderScene(QPainter &painter, size_t w, size_t h)
+{
+    for (size_t i = 0; i != trianglesPoints_.size(); i += 3)
+    {
+        // Triangle vertices
+        Mat44f trans = getTranslation();
+        Vec4f V0 =  trans * trianglesPoints_[i];
+            V0 = V0 * modelViewProjectMat_;
+        Vec4f V1 = trans * trianglesPoints_[i + 1];
+            V1 = V1 * modelViewProjectMat_;
+        Vec4f V2 = trans * trianglesPoints_[i + 2];
+            V2 = V2* modelViewProjectMat_;
+        V0.divByW();
+        V1.divByW();
+        V2.divByW();
+//        Mat44f rotateMatrix = getRotation();
+        Mat44f rotateMatrix = getTranslation();
+        Mat44f scaleMatrix = getScaling();
+        V0 = V0 * rotateMatrix;
+        V1 = V1 * rotateMatrix;
+        V2 = V2 * rotateMatrix;
+>>>>>>> master
 
         // Barycentric Coordinates
         float w0, w1, w2, area;
@@ -162,9 +241,19 @@ void RenderBase::renderScene(QPainter & painter, size_t w, size_t h)
         int xmin = INT_MAX, ymin= INT_MAX;
         findBoundingBox(x0, y0, x1, y1, x2, y2, xmin, ymin, xmax, ymax);
 
+<<<<<<< HEAD
 //        std::cout << - (V2.getY() -  V0.getY()) * (V1.getX() - V0.getX()) << ' ' << area << std::endl;
 //        std::cout << "i= " << i << std::endl << V0 << V1 << V2;
 //        std::cout << trianglesPoints_[i] << " " << trianglesPoints_[i + 1] << " " << trianglesPoints_[i + 2] << std::endl;
+=======
+        // Init buffers(colour and depth respectively)
+//        Buffers::ColourBuffer clBuffer(w, h);
+//        Buffers::fDepthBuffer zBuffer(w, h);
+
+//        std::cout << - (V2.getY() -  V0.getY()) * (V1.getX() - V0.getX()) << ' ' << area << std::endl;
+//        std::cout << "i= " << i << std::endl << V0 << V1 << V2;
+//        std::cout << trianglesPoints[i] << " " << trianglesPoints[i + 1] << " " << trianglesPoints[i + 2] << std::endl;
+>>>>>>> master
 //        if (i != 12)
 //            continue;
 //        if (i == 12)
@@ -187,10 +276,17 @@ void RenderBase::renderScene(QPainter & painter, size_t w, size_t h)
 //                    if (i != 21)
 //                        continue;
 
+<<<<<<< HEAD
                     if (i == 21 || i == 18)
                     {
                         continue;
                     }
+=======
+                                        if (i == 21 || i == 18)
+                                        {
+                                            continue;
+                                        }
+>>>>>>> master
                     // Colouring edges green
                     if (abs(w0) < std::numeric_limits<float>::epsilon() ||
                             abs(w1) < std::numeric_limits<float>::epsilon() ||
