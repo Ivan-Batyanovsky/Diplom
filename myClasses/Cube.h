@@ -5,7 +5,6 @@
 #ifndef DIPLOM_CUBE_H
 #define DIPLOM_CUBE_H
 
-#include "myClasses/Vec4f.h"
 #include <iostream>
 #include <vector>
 class Vec4f;
@@ -19,17 +18,12 @@ public:
 
     Cube();
     Cube(float x, float y, float z, float len);
-<<<<<<< HEAD
     Cube(Vec4f vec);
-=======
-    Cube(const Vec4f & posAndEdge);
->>>>>>> master
 
     void getVertices(std::vector<Vec4f> & v) const;
     void getIndexes(std::vector<Vec4f> & v) const;
-
+    void getUV(size_t polygonID, float & u, float & v) const;
     ~Cube();
 };
-
 
 #endif //DIPLOM_CUBE_H
