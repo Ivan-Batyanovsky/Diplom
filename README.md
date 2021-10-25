@@ -28,6 +28,12 @@ mainwindow, QWidget, QImage, QPaintEvent - библиотеки, предост�
 
 ## Пример
 
+
 ![texture](https://github.com/Ivan-Batyanovsky/Diplom/blob/master/textures.png)
 
+Работа программы
+
 ![rendered object](https://github.com/Ivan-Batyanovsky/Diplom/blob/master/minecraftBlock.png)
+
+Текстура куба
+
